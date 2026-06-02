@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Battery Thermal Monitor - Predictive AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Registration Overlay -->
+    <div id="registration-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center;">
+        <div style="background: #1e293b; padding: 40px; border-radius: 15px; border: 1px solid #3b82f6; width: 350px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);">
+            <h2 style="color: #f8fafc; margin-bottom: 20px; font-family: sans-serif;">Vehicle Registration</h2>
+            <p style="color: #94a3b8; font-size: 12px; margin-bottom: 20px;">Register your VIN to enable cloud-based predictive maintenance and desktop alerts.</p>
+            <input type="text" id="vin-input" placeholder="Enter VIN (e.g. EV2026XYZ)" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box;">
+            <button onclick="registerVehicle()" style="width: 100%; background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;">Enable Predictive Services</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Battery Thermal Early-Warning System</h1>
+        
+        <div id="dashboard-header">
+            <div class="status-box">
+                System Status: <span id="system-status">NOMINAL</span><br>
+                <div id="prediction-status" style="font-weight: bold; margin-top: 5px; color: #2ecc71;">
+                    AI ENGINE: MONITORING
+                </div>
+                <div id="chemistry-info" style="font-size: 10px; color: #94a3b8; margin-top: 4px;">
+                    Profile: NMC (Standard)
+                </div>
+            </div>
+            
+            <div class="controls">
+                <select id="chemistry-select" onchange="updateChemistryProfile()" style="background: #334155; color: white; border: 1px solid #475569; padding: 5px; border-radius: 5px; cursor: pointer;">
+                    <option value="LFP">LFP (Stable)</option>
+                    <option value="NMC" selected>NMC (High Energy)</option>
+                    <option value="NCA">NCA (High Performance)</option>
+                </select>
+                <button id="fail-btn" onclick="startRunaway()">Simulate Cell Failure</button>
+                <button id="reset-btn" onclick="location.reload()">Reset System</button>
+            </div>
+        </div>
+
+        <div id="battery-grid" class="grid-container"></div>
+
+        <div style="background: #1e293b; padding: 15px; border-radius: 10px; margin-top: 20px;">
+            <h3 style="margin-top: 0; font-size: 14px; border-bottom: 1px solid #444; color: #f8fafc;">Live Temperature Trend (Max Pack Temp)</h3>
+            <canvas id="tempChart" height="100"></canvas>
+        </div>
+
+        <div id="log-container" style="background: #1e293b; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: left; max-height: 120px; overflow-y: auto;">
+            <h3 style="margin-top: 0; font-size: 14px; border-bottom: 1px solid #444; color: #f8fafc; padding-bottom: 5px;">BMS Event Log</h3>
+            <div id="logs" style="font-family: monospace; font-size: 11px; color: #94a3b8; line-height: 1.4;">
+                <div>[System] Predictive diagnostics active...</div>
+            </div>
+        </div>
+
+        <!-- Service Inbox Section -->
+        <div id="service-inbox" style="background: #1e293b; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: left; border: 1px solid #334155;">
+            <h3 style="margin-top: 0; font-size: 14px; color: #3b82f6; border-bottom: 1px solid #444; padding-bottom: 5px;">📩 Maintenance Inbox (<span id="inbox-count">0</span>)</h3>
+            <div id="inbox-messages" style="font-size: 11px; color: #f1f5f9; max-height: 120px; overflow-y: auto; margin-top: 10px;">
+                <div style="color: #94a3b8; padding: 10px; text-align: center;">No active maintenance alerts.</div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <span><div class="box green"></div> Normal</span>
+            <span><div class="box yellow"></div> Warning</span>
+            <span><div class="box orange"></div> Early Alert</span>
+            <span><div class="box red"></div> Critical</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
